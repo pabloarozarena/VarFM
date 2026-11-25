@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "varfm"
+version = "0.1.0"
+description = "Features of genetic variants from biological foundation models (pilot: ESM2 and Evo 2 log-likelihoods)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy"]
+
+[project.optional-dependencies]
+esm2 = ["torch", "fair-esm>=2.0"]
+evo2 = ["torch", "evo2>=0.6", "vtx>=1.1"]
+test = ["pytest"]
+
+[project.scripts]
+varfm = "varfm.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+varfm = ["data/*.vcf"]
