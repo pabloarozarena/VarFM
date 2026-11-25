@@ -20,20 +20,29 @@ upload a VCF and run all the cells. Evo 2 needs an A100, L4 or H100 runtime; on 
 
 ## Install
 
+Python 3.11 or 3.12 (Evo 2 requires one of them):
+
 ```bash
-pip install "git+https://github.com/pabloarozarena/VarFM.git"
-pip install fair-esm                                           # ESM2
-pip install --ignore-requires-python evo2==0.6.0 vtx==1.1.0    # Evo 2 (CUDA GPU with bfloat16, ~20 GB)
+python3 -m venv varfm-env && source varfm-env/bin/activate
+pip install "varfm[esm2,evo2] @ git+https://github.com/pabloarozarena/VarFM.git"
 ```
 
-flash-attn is not needed (see Evo 2 below).
+- `varfm[esm2]` installs ESM2 only. Evo 2 needs a CUDA GPU with bfloat16 and about 20 GB of memory.
+- flash-attn is not needed (see Evo 2 below).
+- torch comes from PyPI, whose current builds need CUDA 13 (NVIDIA driver 580 or later). With an older driver,
+  install torch first from the PyTorch index (e.g. `--index-url https://download.pytorch.org/whl/cu126`).
+- On an NVIDIA GB10 / DGX Spark (aarch64), VarFM was tested with torch 2.12.1 for CUDA 13.0, installed before VarFM:
+  `pip install torch==2.12.1 --index-url https://download.pytorch.org/whl/cu130`.
 
 ## Use
 
 ```bash
-varfm extract variants.vcf -o varfm_out          # both models
-varfm extract variants.vcf -m esm2 --limit 10    # one model, first 10 variants
+varfm variants.vcf --models esm2 evo2 --out varfm_out    # both models (the default)
+varfm variants.vcf --models esm2 --limit 10              # one model, first 10 variants
 ```
+
+The VCF comes first. `python -c "import varfm; print(varfm.example_vcf())"` prints the path of the example VCF
+included in the package (100 ClinVar variants on chr1).
 
 ```python
 import varfm

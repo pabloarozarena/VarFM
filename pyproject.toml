@@ -12,7 +12,7 @@ dependencies = ["numpy"]
 
 [project.optional-dependencies]
 esm2 = ["torch", "fair-esm>=2.0"]
-evo2 = ["torch", "evo2>=0.6", "vtx>=1.1"]
+evo2 = ["torch", "evo2==0.6.0", "vtx==1.1.0"]  # the versions whose loading code models/evo2.py adjusts
 test = ["pytest"]
 
 [project.scripts]
